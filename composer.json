@@ -1,0 +1,32 @@
+{
+  "name":"Z-PHP/Z-PHP",
+  "description":"Z-PHP Framework",
+  "type":"Framework",
+  "keywords":[
+    "PHP","Z-PHP","Framework","PHP Framework"
+  ],
+  "license": "MIT",
+  "homepage": "http://zphp.5lazy.cn",
+  "authors": [
+    {
+      "name": "Albert Zhan",
+      "email": "2654709623@qq.com",
+      "homepage": "http://www.5lazy.cn",
+      "role": "Lead Developer"
+    }
+  ],
+  "require":{
+    "php":">=5.4.0",
+    "catfan/medoo":"*",
+    "twig/twig":"*",
+    "filp/whoops":"*",
+    "symfony/var-dumper":"*",
+    "smarty/smarty":"*"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
