@@ -1,1 +1,13 @@
-# Z-PHP1.0 Z-PHP��һ��רע�������Ȩ�޹����Ŀ�ԴPHP��ܣ��̳��Ŵ������ܵ����ԺͿ��ٿ��������PHP�汾Ҳ������PHP5.4�� Ҳ������һЩ���ԣ���Ҫ�������£�<br> * ǿ���RBAC�࣬ʵ�ָ��ӵ�Ȩ�޹��� * ǿ������������⣬ʵ�ֶ�ʱץȡ���ݲ��ٻ��� * ���������ռ���ڶ�PHP������ * ����·�ɹ��� * �����ļ��ɷ��� * ���ݿ��Զ���֤���Զ���� * �����з���֧�� * ������Զ����ɶ��� * ����PHPcomposer������ * ����ģ������֧��<br> Z-PHP������[Z-PHP](http://zphp.5lazy.cn "Z-PHP") <br>��ϸ�����ĵ��ο���[Z-PHP1.0��ȫ�����ֲ�](http://zphp.5lazy.cn "Z-PHP1.0")
+# Z-PHP1.0 Z-PHP是一款专注于爬虫和权限管理的开源PHP框架，继承着大多数框架的特性和快速开发的理念，PHP版本也提升至PHP5.4， 也加入了一些特性，主要特性如下：<br>
+* 强大的RBAC类，实现复杂的权限管理
+* 强大灵活的爬虫类库，实现定时抓取数据不再话下
+* 基于命名空间和众多PHP新特性
+* 灵活的路由功能
+* 配置文件可分离
+* 数据库自动验证和自动完成
+* 命令行访问支持
+* 方便的自动生成定义
+* 引入PHPcomposer包管理
+* 多套模板引擎支持<br>
+Z-PHP官网：[Z-PHP](http://zphp.5lazy.cn "Z-PHP")
+<br>详细开发文档参考：[Z-PHP1.0完全开发手册](http://zphp.5lazy.cn "Z-PHP1.0")
