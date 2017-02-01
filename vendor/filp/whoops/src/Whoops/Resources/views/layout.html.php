@@ -2,7 +2,7 @@
 /**
 * Layout template file for Whoops's pretty error output.
 */
-$app_debug=\system\Conf::get('ERROR');
+$app_debug=\system\Conf::Get('ERROR');
 if(!@APP_DEBUG){
 if(empty($app_debug['HTML'])){
     require_once dirname(__FILE__).'/stop_header.html.php';

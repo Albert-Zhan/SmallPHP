@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Model{
 
@@ -7,6 +12,15 @@ class Model{
 
     //Model配置信息
     private static $config=[];
+
+    // 自动验证定义
+    protected $validate=[];
+
+    //自动完成定义
+    protected $auto=[];
+
+    //错误信息
+    protected $error='';
 
     //PDO对象实例
     public $pdo;
@@ -27,23 +41,23 @@ class Model{
     private $table;
 
     public function __construct($resetting=false){
-        $config=in_array(\system\Conf::get('DB_TYPE','','Database.php'),['mysql','mssql','sqlite'])?\system\Conf::get('DB_TYPE','','Database.php'):'mysql';
+        $config=in_array(\system\Conf::Get('DB_TYPE','','Database.php'),['mysql','mssql','sqlite'])?\system\Conf::Get('DB_TYPE','','Database.php'):'mysql';
         if($config=='sqlite'){
             self::$config=[
                 'database_type' => $config,
-                'database_file' => \system\Conf::get('DB_FILE','','Database.php'),
+                'database_file' => \system\Conf::Get('DB_FILE','','Database.php'),
             ];
         }
         else{
             self::$config=[
                 'database_type' => $config,
-                'database_name' => \system\Conf::get('DB_NAME','','Database.php'),
-                'server' => \system\Conf::get('DB_HOST','','Database.php'),
-                'username' => \system\Conf::get('DB_USER','','Database.php'),
-                'password' => \system\Conf::get('DB_PWD','','Database.php'),
-                'charset' => \system\Conf::get('DB_CHARSET','','Database.php'),
-                'port' => \system\Conf::get('DB_PORT','','Database.php'),
-                'prefix' => \system\Conf::get('DB_PREFIX','','Database.php')==''?'':\system\Conf::get('DB_PREFIX','','Database.php'),
+                'database_name' => \system\Conf::Get('DB_NAME','','Database.php'),
+                'server' => \system\Conf::Get('DB_HOST','','Database.php'),
+                'username' => \system\Conf::Get('DB_USER','','Database.php'),
+                'password' => \system\Conf::Get('DB_PWD','','Database.php'),
+                'charset' => \system\Conf::Get('DB_CHARSET','','Database.php'),
+                'port' => \system\Conf::Get('DB_PORT','','Database.php'),
+                'prefix' => \system\Conf::Get('DB_PREFIX','','Database.php')==''?'':\system\Conf::Get('DB_PREFIX','','Database.php'),
             ];
         }
         $resetting===false?self::$model===null && self::$model=new \medoo(self::$config):self::$model=new \medoo(self::$config);
@@ -68,7 +82,7 @@ class Model{
     /**
      * 清除数据库配置信息
      */
-    public function clean(){
+    public function Clean(){
         $this->__construct(true);
     }
 
@@ -77,7 +91,7 @@ class Model{
      * @param $table 表名
      * @return $this
      */
-    public function table($table){
+    public function Table($table){
         $this->table=$table;
         return $this;
     }
@@ -87,7 +101,7 @@ class Model{
      * @param $where 查询条件
      * @return $this
      */
-    public function where($where){
+    public function Where($where){
         $this->where=$where;
         return $this;
     }
@@ -97,8 +111,8 @@ class Model{
      * @param array $data 数据
      * @return $this
      */
-    public function data($data){
-        $this->data=$data;
+    public function Data($data){
+        $this->data=array_merge($this->data,$data);
         return $this;
     }
 
@@ -107,7 +121,7 @@ class Model{
      * @param array $field 字段
      * @return $this
      */
-    public function field($field){
+    public function Field($field){
         $this->field=$field;
         return $this;
     }
@@ -118,7 +132,7 @@ class Model{
      * @param $rows 每页显示数量
      * @return $this
      */
-    public function page($page,$rows){
+    public function Page($page,$rows){
         self::$model->page($page,$rows);
         return $this;
     }
@@ -128,15 +142,15 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function insert($not=true){
+    public function Insert($not=true){
         $this->datas=self::$model->insert($this->table,$this->data);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -145,7 +159,7 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function find($not=true){
+    public function Find($not=true){
         $field=$this->field==[]?'*':$this->field;
         if(is_array($this->table)){
             $this->datas=self::$model->selects($this->table,$field,$this->where,true);
@@ -153,13 +167,13 @@ class Model{
         else {
             $this->datas = self::$model->get($this->table, $field, $this->where);
         }
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -168,7 +182,7 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function select($not=true){
+    public function Select($not=true){
         $field=$this->field==[]?'*':$this->field;
         if(is_array($this->table)){
             $this->datas=self::$model->selects($this->table,$field,$this->where,false);
@@ -176,13 +190,13 @@ class Model{
         else{
             $this->datas=self::$model->select($this->table,$field,$this->where);
         }
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -191,15 +205,15 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function update($not=true){
+    public function Update($not=true){
         $this->datas=self::$model->update($this->table,$this->data,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -208,15 +222,15 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function delete($not=true){
+    public function Delete($not=true){
         $this->datas=self::$model->delete($this->table,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -225,16 +239,16 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function count($not=true){
+    public function Count($not=true){
         $field=$this->field==[]?'*':$this->field;
         $this->datas=self::$model->count($this->table,$field,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -243,15 +257,15 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function is_exist($not=true){
+    public function IsExist($not=true){
         $this->datas=self::$model->has($this->table,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -260,16 +274,16 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function max($not=true){
+    public function Max($not=true){
         $field=$this->field==[]?'*':$this->field;
         $this->datas=self::$model->max($this->table,$field,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -278,16 +292,16 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function min($not=true){
+    public function Min($not=true){
         $field=$this->field==[]?'*':$this->field;
         $this->datas=self::$model->min($this->table,$field,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -296,16 +310,16 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function avg($not=true){
+    public function Avg($not=true){
         $field=$this->field==[]?'*':$this->field;
         $this->datas=self::$model->avg($this->table,$field,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -314,16 +328,16 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function sum($not=true){
+    public function Sum($not=true){
         $field=$this->field==[]?'*':$this->field;
         $this->datas=self::$model->sum($this->table,$field,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -334,15 +348,15 @@ class Model{
      * @param bool $not true返回执行后的数据false返回执行的sql
      * @return bool|string
      */
-    public function replace($search,$replace,$not=true){
+    public function Replace($search,$replace,$not=true){
         $this->datas=self::$model->replace($this->table,$this->field,$search,$replace,$this->where);
-        self::error();
-        $this->flushAll();
+        $this->Error();
+        $this->FlushAll();
         if($not){
             return $this->datas;
         }
         else{
-            return $this->fachsql();
+            return $this->Fachsql();
         }
     }
 
@@ -351,9 +365,9 @@ class Model{
      * @param $sql SQL语句
      * @return bool|string
      */
-    public function exec($sql){
+    public function Exec($sql){
         $this->datas=self::$model->exec($sql);
-        self::error();
+        $this->Error();
         return $this->datas;
     }
 
@@ -362,39 +376,116 @@ class Model{
      * @param $sql SQL语句
      * @return bool|string
      */
-    public function query($sql){
+    public function Query($sql){
         $this->datas=self::$model->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
-        self::error();
+        $this->Error();
         return $this->datas;
+    }
+
+    /**
+     * 动态设置自动验证规则
+     * @param $validate 验证规则
+     * @return $this
+     */
+    public function Validate($validate){
+        $this->auto[]=$validate;
+        return $this;
+    }
+
+    /**
+     * 自动验证规则处理
+     * @param $data 自动验证规则
+     */
+    private function ValidateOperation($data){
+
+    }
+
+    /**
+     * 动态设置自动完成规则
+     * @param $auto 自动完成规则
+     * @return $this
+     */
+    public function Auto($auto){
+        $this->auto[]=$auto;
+        return $this;
+    }
+
+    /**
+     * 自动完成规则处理
+     * @param $data 自动完成规则
+     * @return array
+     */
+    private function AutoOperation($data){
+        $rows=[];
+        foreach($data as $k=>$v){
+            $type=isset($v[3])?$v[3]:'string';
+            switch($type){
+                case 'string':
+                    $rows[$v[0]]=$v[1];
+                break;
+                case 'function':
+                    $rows[$v[0]]=is_array($v[1])?call_user_func_array($v[2],$v[1]):call_user_func($v[2],$v[1]);
+                break;
+                case 'callback':
+                    $rows[$v[0]]=is_array($v[1])?call_user_func_array($v[2],$v[1]):call_user_func($v[2],$v[1]);
+                break;
+            }
+        }
+        $this->auto=[];
+        return $rows;
+    }
+
+    /**
+     * 创建数据对象
+     *
+     * @return bool
+     */
+    public function Create(){
+        if(!empty($this->auto)){
+            $auto=$this->AutoOperation($this->auto);
+            $this->data=array_merge($this->data,$auto);
+        }
+        if(!empty($this->validate)){
+
+        }
+        return true;
+    }
+
+    /**
+     * 获取错误信息
+     * @return string
+     */
+    public function GetError(){
+        return $this->error;
     }
 
     /**
      * 返回当前执行的SQL语句
      * @return string
      */
-    public function fachsql(){
+    private function Fachsql(){
         return self::$model->last_query();
     }
 
     /**
      *SQL错误捕获
      */
-    public function error(){
+    private function Error(){
         $error=self::$model->error();
         if($error[1]!==null){
-            $message='SQL错误码：'.$error[1].'错误代码：'.$error[2].'SQL语句：'.$this->fachsql();
-            if(\system\Conf::get('DB_DEBUG','','Database.php')){
+            $message='SQL错误码：'.$error[1].'错误代码：'.$error[2].'SQL语句：'.$this->Fachsql();
+            if(\system\Conf::Get('DB_DEBUG','','Database.php')){
                 $log=new \system\Log('File',['type'=>'sql']);
-                $log->write($message);
+                $log->Write($message);
             }
-            \system\Error::thrown('SQL错误码:'.$error[1].'  '.$error[2]);
+            \system\Error::Thrown('SQL错误码:'.$error[1].'  '.$error[2]);
         }
     }
 
     /**
      * 返回数据库版本信息
      */
-    public function version(){
+    public function Version(){
         $data=self::$model->info();
         return $data['version'];
     }
@@ -402,7 +493,7 @@ class Model{
     /**
      * 清空当前查询数据
      */
-    private function flushAll(){
+    private function FlushAll(){
         $this->where=[];
         $this->field=[];
         $this->data=[];

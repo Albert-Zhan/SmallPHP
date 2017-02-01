@@ -329,7 +329,7 @@ final class Run implements RunInterface
                 if(@APP_DEBUG) {
                     $log = new \system\Log();
                     $message = '错误代码：' . $message . '错误文件：' . $file . '错误行数：' .$line;
-                    $log->write($message);
+                    $log->Write($message);
                 }
                if($exception->getMessage()!='A session had already been started - ignoring session_start()'){
                    throw $exception;
@@ -338,7 +338,7 @@ final class Run implements RunInterface
                 if(@APP_DEBUG) {
                     $log = new \system\Log();
                     $message = '错误代码：' . $message . '错误文件：' . $file . '错误行数：' .$line;
-                    $log->write($message);
+                    $log->Write($message);
                 }
                 $this->handleException($exception);
             }

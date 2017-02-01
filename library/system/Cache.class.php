@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Cache{
 
@@ -11,13 +16,13 @@ class Cache{
      */
     public function __construct($config=''){
         if(empty($config)){
-            $config=\system\Conf::get('CACHE');
+            $config=\system\Conf::Get('CACHE');
         }
         $driver=empty($config['DRIVER'])?'File':$config['DRIVER'];
         $class='\system\Cache\driver\\'.$driver;
         if(self::$handle===null) {
             if($driver!='File'){
-                $config=\system\Conf::get($driver);
+                $config=\system\Conf::Get($driver);
             }
             self::$handle=new $class(for_key($config,'strtolower'));
         }
@@ -30,8 +35,8 @@ class Cache{
      * @param int $expire 失效时间
      * @return bool
      */
-    public function set($key,$value,$expire=0){
-        return self::$handle->set($key,$value,$expire);
+    public function Set($key,$value,$expire=0){
+        return self::$handle->Set($key,$value,$expire);
     }
 
     /**
@@ -39,8 +44,8 @@ class Cache{
      * @param $key KEY名称
      * @return bool|string
      */
-    public function get($key){
-        return self::$handle->get($key);
+    public function Get($key){
+        return self::$handle->Get($key);
     }
 
     /**
@@ -48,8 +53,8 @@ class Cache{
      * @param $key KEY名称
      * @retunr bool
      */
-    public function has($key){
-        return self::$handle->isExists($key);
+    public function Has($key){
+        return self::$handle->IsExists($key);
     }
 
     /**
@@ -57,16 +62,16 @@ class Cache{
      * @param $key KEY名称
      * @return bool|string
      */
-    public function del($key){
-        return self::$handle->del($key);
+    public function Del($key){
+        return self::$handle->Del($key);
     }
 
     /**
      * 清除所有缓存
      * @return bool
      */
-    public function clean(){
-        if(self::$handle->flushAll()){
+    public function Clean(){
+        if(self::$handle->FlushAll()){
             return true;
         }
         else{

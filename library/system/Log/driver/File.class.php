@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system\Log\driver;
 class File{
 
@@ -27,7 +32,7 @@ class File{
      * @param $dir 目录名
      * @return bool
      */
-    private function check($dir){
+    private function Check($dir){
         if(is_dir($dir) AND file_put_contents($dir.'access.txt','access_test')){
             @unlink($dir.'access.txt');
             return true;
@@ -44,10 +49,10 @@ class File{
      * @return bool
      * @throws \system\Exception
      */
-    public function write($msg,$path=''){
+    public function Write($msg,$path=''){
         $dir=self::$config['type']=='log'?'Logs':'Data';
         $path=empty($path)?APP_PATH.'Runtime/'.$dir.'/':$path;
-        if($this->check($path)){
+        if($this->Check($path)){
             $file=$path.date('Ymd').'.log';
             $head=date('Y-m-d H:i:s').'　　　'.self::$msg[self::$config['type']].PHP_EOL;
             if(file_exists($file)  and filesize($file)<=self::$config['size']){
@@ -59,7 +64,7 @@ class File{
             return true;
         }
         else{
-            \system\Error::thrown('写入日志失败,权限不足');
+            \system\Error::Thrown('写入日志失败,权限不足');
         }
     }
 
@@ -69,7 +74,7 @@ class File{
      * @param string $path 日志路径
      * @return array|bool
      */
-    public function read($fileanme='',$path=''){
+    public function Read($fileanme='',$path=''){
         $dir=self::$config['type']=='log'?'Logs':'Data';
         $path=$path==''?APP_PATH.'Runtime/'.$dir.'/':$path;
         $fileanme=$fileanme==''?date('Ymd').'.log':$fileanme;

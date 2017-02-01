@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 use \system\Controller;
 class Rbac extends Controller{
@@ -25,32 +30,35 @@ class Rbac extends Controller{
         //生成当前地址
         $this->current_url = MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME;
         //获取配置信息
-        $this->config_info=array_merge($this->config_info,\system\Conf::get('RBAC',[]));
+        $this->config_info=array_merge($this->config_info,\system\Conf::Get('RBAC',[]));
         if(empty($this->current_menuinfo)){
-            $this->current_menuinfo=$this->getMenuInfo($this->current_url);
+            $this->current_menuinfo=$this->GetMenuInfo($this->current_url);
         }
     }
 
     /**
      * 获取当前URL菜单信息
      * @param $current_url 当前url
+     * @return array
      */
-    private function getMenuInfo($current_url){
-        return $this->model->table($this->config_info['TABLE']['menu'])->where(['control'=>$current_url])->find();
+    private function GetMenuInfo($current_url){
+        $model=new \system\Model();
+        return $model->Table($this->config_info['TABLE']['menu'])->Where(['control'=>$current_url])->Find();
     }
 
     /**
      * 判断是否登录
      */
-    protected function isLogin(){
+    protected function IsLogin(){
+        $model=new \system\Model();
         if(!\system\Session::get($this->config_info['USER_ID'])){
             return false;
         }
-        $userInfo=$this->model->table($this->config_info['TABLE']['user'])->where([$this->config_info['KEY_ID']=>\system\Session::get($this->config_info['USER_ID'])])->find();
+        $userInfo=$model->Table($this->config_info['TABLE']['user'])->Where([$this->config_info['KEY_ID']=>\system\Session::Get($this->config_info['USER_ID'])])->Find();
         if(empty($userInfo)){
             return false;
         }
-        $roleInfo=$this->model->table($this->config_info['TABLE']['role'])->where([$this->config_info['KEY_ID']=>$userInfo['fk_role_id']])->field(['menu_auth','name(role_name)'])->find();
+        $roleInfo=$model->Table($this->config_info['TABLE']['role'])->Where([$this->config_info['KEY_ID']=>$userInfo['fk_role_id']])->Field(['menu_auth','name(role_name)'])->Find();
         $this->user_info=array_merge($userInfo,$roleInfo);
         return true;
     }
@@ -59,10 +67,10 @@ class Rbac extends Controller{
      * 检测用户权限
      * @param [] $public 公共的控制器方法
      */
-    protected function checkAuth($public=[]){
+    protected function CheckAuth($public=[]){
         //判断是否登录
-        if(!$this->isLogin()){
-            $this->redirect($this->config_info['LOGOUT_URL'],$this->config_info['LOGOUT_MSG']);
+        if(!$this->IsLogin()){
+            $this->Redirect($this->config_info['LOGOUT_URL'],$this->config_info['LOGOUT_MSG']);
             exit;
         }
         //过滤超级用户
@@ -79,24 +87,26 @@ class Rbac extends Controller{
     /**
      * 获取PID为0的菜单
      */
-    private function getNavList(){
+    private function GetNavList(){
+        $model=new \system\Model();
         $not=$this->user_info['fk_role_id']==1 && $this->config_info['IS_ROOT']===true;
         //检测权限
         if(!$not){
             $map[$this->config_info['KEY_ID']]=[$this->user_info['menu_auth']];
         }
         $map['pid']=0;
-        return $this->model->table($this->config_info['TABLE']['menu'])->where(['AND'=>$map])->field([$this->config_info['KEY_ID'],'pid','name','control'])->select();
+        return $model->Table($this->config_info['TABLE']['menu'])->Where(['AND'=>$map])->Field([$this->config_info['KEY_ID'],'pid','name','control'])->Select();
     }
 
     /**
      * 递归获取当前URL上级地址
      * @param string $pid PID
      */
-    private function getTopUrl($pid=''){
-        $info=$this->model->table($this->config_info['TABLE']['menu'])->where([$this->config_info['KEY_ID']=>$pid])->field(['control','pid'])->find();
+    private function GetTopUrl($pid=''){
+        $model=new \system\Model();
+        $info=$model->Table($this->config_info['TABLE']['menu'])->Where([$this->config_info['KEY_ID']=>$pid])->Field(['control','pid'])->Find();
         if ($info['pid']){
-            $this->getTopUrl($info['pid']);
+            $this->GetTopUrl($info['pid']);
         }else {
             $this->current_nav = $info['control'];
             return $info['control'];
@@ -109,7 +119,8 @@ class Rbac extends Controller{
      * @param $userInfo 当前用户信息
      * @return strin|bool
      */
-    private function getMenuTree($control='',$userInfo){
+    private function GetMenuTree($control='',$userInfo){
+        $model=new \system\Model();
         $not=$userInfo['fk_role_id']==1 && $this->config_info['IS_ROOT']===true;
         //检测权限
         if(!$not){
@@ -117,10 +128,10 @@ class Rbac extends Controller{
         }
         $map['is_hidden']=0;
         $field=[$this->config_info['KEY_ID'],'pid','soft','name','control'];
-        $rows=$this->model->table($this->config_info['TABLE']['menu'])->where(['AND'=>$map,'ORDER'=>"soft DESC"])->field($field)->select();
+        $rows=$model->Table($this->config_info['TABLE']['menu'])->Where(['AND'=>$map,'ORDER'=>"soft DESC"])->Field($field)->Select();
         $rows=$this->list_to_tree($rows,$this->config_info['KEY_ID']);
         if($control){
-            $id=$this->model->table($this->config_info['TABLE']['menu'])->where(['control'=>$control])->field($this->config_info['KEY_ID'])->find();
+            $id=$model->Table($this->config_info['TABLE']['menu'])->Where(['control'=>$control])->Field($this->config_info['KEY_ID'])->Find();
             if ($id){
                 foreach ($rows as $key=>$value){
                     if ($value[$this->config_info['KEY_ID']] == $id){
@@ -172,24 +183,24 @@ class Rbac extends Controller{
      * @param array|string $data 模板赋值变量
      * @param string $file 模板文件
      */
-    protected function showView($data=[],$file=''){
+    protected function ShowView($data=[],$file=''){
         //当前URL
         $data['currentUrl']=$this->current_url;
         //获取菜单树
-        $data['navList']=$this->getNavList();
+        $data['navList']=$this->GetNavList();
         //获取当前URL上级地址
         if ($this->current_menuinfo['pid']){
-            $this->getTopUrl($this->current_menuinfo['pid']);
+            $this->GetTopUrl($this->current_menuinfo['pid']);
         }else {
             $this->current_nav = $this->current_menuinfo['control'];
         }
         $data['currentNav']=$this->current_nav;
         //获取菜单列表
-        $data['menu_list']=$this->getMenuTree($this->current_nav,$this->user_info);
+        $data['menu_list']=$this->GetMenuTree($this->current_nav,$this->user_info);
         //用户信息
         $data['userInfo']=$this->user_info;
-        $this->assign($data);
-        $this->display($file);
+        $this->Assign($data);
+        $this->Display($file);
     }
 
 }

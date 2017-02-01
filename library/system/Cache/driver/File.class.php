@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system\Cache\driver;
 class File {
 
@@ -27,7 +32,7 @@ class File {
      * @param string $name 缓存变量名
      * @return string
      */
-    private function filename($name) {
+    private function FileName($name) {
         $key=$this->config['key'];
         $name	=	md5($key.$name);
         $filename	=	$this->config['prefix'].$name.'.php';
@@ -40,8 +45,8 @@ class File {
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name) {
-        $filename   =   $this->filename($name);
+    public function Get($name) {
+        $filename   =   $this->FileName($name);
         if (!is_file($filename)) {
            return false;
         }
@@ -76,11 +81,11 @@ class File {
      * @param int $expire  有效时间 0为永久
      * @return boolean
      */
-    public function set($name,$value,$expire=0) {
+    public function Set($name,$value,$expire=0) {
         if(is_null($expire)) {
             $expire =  $this->config['expire'];
         }
-        $filename   =   $this->filename($name);
+        $filename   =   $this->FileName($name);
         $data   =   serialize($value);
         if($this->config['compress'] && function_exists('gzcompress')) {
             //数据压缩
@@ -106,7 +111,7 @@ class File {
      * @param $name 缓存变量名
      * @return mixed
      */
-    public function isExists($name){
+    public function IsExists($name){
         if($this->get($name)){
             return true;
         }
@@ -121,14 +126,14 @@ class File {
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function del($name) {
-        return unlink($this->filename($name));
+    public function Del($name) {
+        return unlink($this->FileName($name));
     }
 
     /**
      * 清除所有缓存
      */
-    public function flushAll(){
+    public function FlushAll(){
         if(!is_dir($this->config['temp']))
         {
             return false;

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 define('ZPHP_VERSION','1.0.0');
 define('EXT','.php');
@@ -9,11 +14,11 @@ define('IS_CLI',PHP_SAPI=='cli'?true:false);
 define('IS_CGI',(0 === strpos(PHP_SAPI,'cgi') || false !== strpos(PHP_SAPI,'fcgi')) ? 1 : 0 );
 define('IS_WIN',strpos(PHP_OS,'WIN')!==false);
 $_dirname=dirname($_SERVER['SCRIPT_NAME']);
-if($_dirname=='\\'){
-    $_root=str_replace('\\','/',$_dirname);
+if($_dirname=='/'){
+    $_root=str_replace('/','',$_dirname);
 }
 else{
-    $_root=$_dirname.'/';
+    $_root=$_dirname;
 }
 define('__ROOT__',$_root);
 //设置时区

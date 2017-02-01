@@ -1,4 +1,5 @@
 <?php
+
 namespace system\Cache\driver;
 class Redis {
 
@@ -41,7 +42,7 @@ class Redis {
      * @param int $timeOut 时间  0表示无过期时间
      * @return string $retRes
      */
-    public function set($key, $value, $timeOut=0) {
+    public function Set($key, $value, $timeOut=0) {
         $retRes = self::$redis->set($key, $value);
         if ($timeOut > 0) {
             self::$redis->expire($key, $timeOut);
@@ -54,7 +55,7 @@ class Redis {
      * @param string $key 集合Y名称
      * @param string|array $value  值
      */
-    public function sadd($key,$value){
+    public function Sadd($key,$value){
         return self::$redis->sadd($key,$value);
     }
 
@@ -63,7 +64,7 @@ class Redis {
      * @param string $key 集合名称
      * @param string|array $value  值
      */
-    public function zadd($key,$value){
+    public function Zadd($key,$value){
         return self::$redis->zadd($key,$value);
     }
 
@@ -72,7 +73,7 @@ class Redis {
      * @param $setName 集合名字
      * @return array|bool|string
      */
-    public function smembers($setName){
+    public function Smembers($setName){
         return self::$redis->smembers($setName);
     }
 
@@ -82,7 +83,7 @@ class Redis {
      * @param int $timeout 获取得到的数据
      * @return bool|string 时间
      */
-    public function sets($keyArray, $timeout=0) {
+    public function Sets($keyArray, $timeout=0) {
         if (is_array($keyArray)) {
             $retRes = self::$redis->mset($keyArray);
             if ($timeout > 0) {
@@ -101,7 +102,7 @@ class Redis {
      * @param string $key KEY名称
      * @return bool|string $result
      */
-    public function get($key) {
+    public function Get($key) {
         $result=self::$redis->get($key);
         if(empty($result)){
             return false;
@@ -116,7 +117,7 @@ class Redis {
      * @param $keyArray $keyArray 获key数值
      * @return array|bool|string
      */
-    public function gets($keyArray) {
+    public function Gets($keyArray) {
         if (is_array($keyArray)) {
             $result=self::$redis->mget($keyArray);
             if(empty($result)){
@@ -133,7 +134,7 @@ class Redis {
     /**
      * 获取所有key名，不是值
      */
-    public function keyAll() {
+    public function KeyAll() {
         return self::$redis->keys('*');
     }
 
@@ -142,7 +143,7 @@ class Redis {
      * @param string $key 删除KEY的名称
      * @return bool
      */
-    public function del($key) {
+    public function Del($key) {
         $result=self::$redis->delete($key);
         if($result){
             return true;
@@ -157,7 +158,7 @@ class Redis {
      * @param $keyArray KEY集合
      * @return bool|string
      */
-    public function dels($keyArray) {
+    public function Dels($keyArray) {
         if (is_array($keyArray)) {
             $result=self::$redis->del($keyArray);
             if($result){
@@ -176,7 +177,7 @@ class Redis {
      * @param $key KEY名称
      * @return int
      */
-    public function increment($key) {
+    public function Increment($key) {
         return self::$redis->incr($key);
     }
 
@@ -185,7 +186,7 @@ class Redis {
      * @param $key KEY名称
      * @return int
      */
-    public function decrement($key) {
+    public function Decrement($key) {
         return self::$redis->decr($key);
     }
 
@@ -194,21 +195,21 @@ class Redis {
      * @param $key KEY名称
      * @return bool
      */
-    public function isExists($key){
+    public function IsExists($key){
         return self::$redis->exists($key);
     }
 
     /**
      * 清空数据
      */
-    public function flushAll() {
+    public function FlushAll() {
         return self::$redis->flushAll();
     }
 
     /**
      * 关闭Redis连接
      */
-    public function close(){
+    public function Close(){
         return self::$redis->close();
     }
 

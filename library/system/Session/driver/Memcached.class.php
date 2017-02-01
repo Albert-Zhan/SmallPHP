@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system\Session\driver;
 class Memcached extends \SessionHandler{
 
@@ -20,7 +25,7 @@ class Memcached extends \SessionHandler{
      * @return bool
      */
     public function open($session_path,$session_name){
-        $this->memcached=new \system\Cache\driver\Memcached(for_key(\system\Conf::get('Memcached'),'strtolower'));
+        $this->memcached=new \system\Cache\driver\Memcached(for_key(\system\Conf::Get('Memcached'),'strtolower'));
         return true;
     }
 
@@ -31,8 +36,8 @@ class Memcached extends \SessionHandler{
      * @return bool
      */
     public function write($session_id,$session_data){
-        $config=\system\Conf::get('SESSION');
-        return $this->memcached->set($this->config['prefix'].$session_id,$session_data,$config['EXPIRE']);
+        $config=\system\Conf::Get('SESSION');
+        return $this->memcached->Set($this->config['prefix'].$session_id,$session_data,$config['EXPIRE']);
     }
 
     /**
@@ -41,7 +46,7 @@ class Memcached extends \SessionHandler{
      * @return string|bool
      */
     public function read($session_id){
-        return $this->memcached->get($this->config['prefix'].$session_id);
+        return $this->memcached->Get($this->config['prefix'].$session_id);
     }
 
     /**
@@ -50,7 +55,7 @@ class Memcached extends \SessionHandler{
      * @return bool
      */
     public function destroy($session_id){
-        return $this->memcached->del($this->config['prefix'].$session_id);
+        return $this->memcached->Del($this->config['prefix'].$session_id);
     }
 
     /**
@@ -59,7 +64,7 @@ class Memcached extends \SessionHandler{
      */
     public function close(){
         $this->gc(ini_get('session.gc_maxlifetime'));
-        $this->memcached->close();
+        $this->memcached->Close();
         $this->memcached = null;
         return true;
     }

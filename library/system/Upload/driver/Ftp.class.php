@@ -47,7 +47,7 @@ class Ftp {
 
         /* 登录FTP服务器 */
         if(!$this->login()){
-            \system\Error::thrown($this->error);
+            \system\Error::Thrown($this->error);
         }
     }
 

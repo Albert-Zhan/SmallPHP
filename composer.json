@@ -20,8 +20,7 @@
     "catfan/medoo":"*",
     "twig/twig":"*",
     "filp/whoops":"*",
-    "symfony/var-dumper":"*",
-    "smarty/smarty":"*"
+    "symfony/var-dumper":"*"
   },
   "repositories": {
     "packagist": {

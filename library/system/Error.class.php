@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Error{
 
@@ -14,12 +19,12 @@ class Error{
      * @param int $lever 错误等级
      * @throws Exception
      */
-    public static function thrown($message,$lever=E_NOTICE){
+    public static function Thrown($message,$lever=E_NOTICE){
         $exception=new \system\Exception($message,$lever,$lever);
         if(@APP_DEBUG){
             $log = new \system\Log();
             $message = '错误代码：' . $exception->getMessage() . '错误文件：' . $exception->getFile() . '错误行数：' .$exception->getLine();
-            $log->write($message);
+            $log->Write($message);
         }
         throw $exception;
     }
@@ -27,7 +32,7 @@ class Error{
     /**
      * 注册错误信息捕获
      */
-   public static function register(){
+   public static function Register(){
         if(self::$whoops===null){
             self::$whoops=new \Whoops\Run();
         }

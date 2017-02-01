@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system\Session\driver;
 class Redis extends \SessionHandler{
 
@@ -20,7 +25,7 @@ class Redis extends \SessionHandler{
      * @return bool
      */
     public function open($session_path,$session_name){
-        $this->redis=new \system\Cache\driver\Redis(for_key(\system\Conf::get('Redis'),'strtolower'));
+        $this->redis=new \system\Cache\driver\Redis(for_key(\system\Conf::Get('Redis'),'strtolower'));
         return true;
     }
 
@@ -31,8 +36,8 @@ class Redis extends \SessionHandler{
      * @return bool
      */
     public function write($session_id,$session_data){
-            $config=\system\Conf::get('SESSION');
-            return $this->redis->set($this->config['prefix'].$session_id,$session_data,$config['EXPIRE']);
+            $config=\system\Conf::Get('SESSION');
+            return $this->redis->Set($this->config['prefix'].$session_id,$session_data,$config['EXPIRE']);
     }
 
     /**
@@ -41,7 +46,7 @@ class Redis extends \SessionHandler{
      * @return string|bool
      */
     public function read($session_id){
-            return $this->redis->get($this->config['prefix'].$session_id);
+            return $this->redis->Get($this->config['prefix'].$session_id);
     }
 
     /**
@@ -50,7 +55,7 @@ class Redis extends \SessionHandler{
      * @return bool
      */
     public function destroy($session_id){
-            return $this->redis->del($this->config['prefix'].$session_id);
+            return $this->redis->Del($this->config['prefix'].$session_id);
     }
 
     /**
@@ -59,7 +64,7 @@ class Redis extends \SessionHandler{
      */
     public function close(){
         $this->gc(ini_get('session.gc_maxlifetime'));
-        $this->redis->close();
+        $this->redis->Close();
         $this->redis = null;
         return true;
     }

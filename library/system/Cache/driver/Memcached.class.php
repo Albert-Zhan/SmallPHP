@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system\Cache\driver;
 class Memcached
 {
@@ -53,7 +58,7 @@ class Memcached
      * @param int $expire 有效时间（秒）
      * @return bool
      */
-    public function set($name, $value, $expire = 0)
+    public function Set($name, $value, $expire = 0)
     {
         if (self::$Memcached->set($name, $value, $expire)) {
             return true;
@@ -67,7 +72,7 @@ class Memcached
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function Get($name)
     {
         return self::$Memcached->get($name);
     }
@@ -77,7 +82,7 @@ class Memcached
      * @param $name 缓存变量名
      * @return bool
      */
-    public function isExists($name){
+    public function IsExists($name){
         if($this->get($name)){
             return true;
         }
@@ -91,7 +96,7 @@ class Memcached
      * @param string $name 缓存变量名
      * @return bool
      */
-    public function del($name)
+    public function Del($name)
     {
         if (self::$Memcached->delete($name)) {
             return true;
@@ -106,7 +111,7 @@ class Memcached
      * @param $value 追加的值
      * @return bool
      */
-    public function append($key,$value){
+    public function Append($key,$value){
         return self::$Memcached->append($key,$value);
     }
 
@@ -115,7 +120,7 @@ class Memcached
      * @param $key KEY名称
      * @return bool
      */
-    public function increment($key){
+    public function Increment($key){
         return self::$Memcached->increment($key);
     }
 
@@ -124,7 +129,7 @@ class Memcached
      * @param $key KEY名称
      * @return bool
      */
-    public function decrement($key){
+    public function Decrement($key){
         return self::$Memcached->decrement($key);
     }
 
@@ -132,7 +137,7 @@ class Memcached
      * 清除缓存
      * @return void
      */
-    public function flushAll()
+    public function FlushAll()
     {
         if (self::$Memcached->flush()) {
             return true;
@@ -144,7 +149,7 @@ class Memcached
     /**
      * 关闭Memcached连接
      */
-    public function close(){
+    public function Close(){
         self::$Memcached->quit();
     }
 

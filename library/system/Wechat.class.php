@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Wechat{
 
@@ -11,8 +16,8 @@ class Wechat{
     //构造函数
     public function __construct($appid='',$appsecret='')
     {
-        $this->appid=$appid==''?\system\Conf::get('appid'):$appid;
-        $this->appsecret=$appsecret==''?\system\Conf::get('appsecret'):$appsecret;
+        $this->appid=$appid==''?\system\Conf::Get('appid'):$appid;
+        $this->appsecret=$appsecret==''?\system\Conf::Get('appsecret'):$appsecret;
     }
 
     //验证签名

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Qiniu{
 
@@ -74,7 +79,7 @@ class Qiniu{
      * @param $host 空间域名
      * @return string
      */
-    public function fetch($url,$host){
+    public function Fetch($url,$host){
         $extension = substr($url, strrpos($url, '.') + 1);
         $fetch = $this->urlsafe_base64_encode($url);
         $time = date("Ymd");

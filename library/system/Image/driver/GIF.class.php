@@ -41,7 +41,7 @@ class GIF{
 				$this->frames = $de->GIFGetFrames();
 				$this->delays = $de->GIFGetDelays();
 			} catch(\Exception $e){
-                \system\Error::thrown("解码GIF图片出错");
+                \system\Error::Thrown("解码GIF图片出错");
 			}
 		}
 	}

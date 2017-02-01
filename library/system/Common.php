@@ -1,8 +1,9 @@
 <?php
 /**
- * 系统函数库
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
  */
-
 /**
  * 遍历数组中的键并且执行第二个参数的函数
  * @param array $data 数组
@@ -54,8 +55,8 @@ return $data;
  * @return string $url
  */
 function url($url='',$param=''){
-$host='http://'.$_SERVER['HTTP_HOST'].__ROOT__;
-switch(\system\Conf::get('URL_MODEL','1')){
+$host='http://'.$_SERVER['HTTP_HOST'].__ROOT__.'/';
+switch(\system\Conf::Get('URL_MODEL','1')){
     case '1':
         $uri=pathinfo($_SERVER['SCRIPT_NAME']);
         $host=$host.$uri['basename'];
@@ -86,7 +87,7 @@ switch(\system\Conf::get('URL_MODEL','1')){
             !isset($array[2]) && $array[2]='index';
             $url=$host.'/'.$array[0].'/'.$array[1].'/'.$array[2];
         }
-        $ffix=\system\Conf::get('URL_HTML_SUFFIX','.html');
+        $ffix=\system\Conf::Get('URL_HTML_SUFFIX','.html');
         if($param!='' AND is_array($param)){
             $url=$url.'/'.ForPathinfo($param).$ffix;
         }
@@ -105,7 +106,7 @@ switch(\system\Conf::get('URL_MODEL','1')){
             !isset($array[2]) && $array[2]='index';
             $url=$host.$array[0].'/'.$array[1].'/'.$array[2];
         }
-        $ffix=\system\Conf::get('URL_HTML_SUFFIX','.html');
+        $ffix=\system\Conf::Get('URL_HTML_SUFFIX','.html');
         if($param!='' AND is_array($param)){
             $url=$url.'/'.ForPathinfo($param).$ffix;
         }

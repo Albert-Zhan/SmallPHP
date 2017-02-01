@@ -53,7 +53,7 @@ class html{
         }
         else{
            if( ($this->num-1)>count($array) ){
-               \system\Error::thrown('获取不到指定的数据条目');
+               \system\Error::Thrown('获取不到指定的数据条目');
            }
             return $array[$this->num-1];
         }

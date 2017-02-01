@@ -33,7 +33,7 @@ class phpreptile{
         $data==''?$datas=self::$data:$datas=$data;
         foreach($regexps as $k=>$regexp){
             if(!preg_match_all($regexp[0],$datas,$datas)){
-                \system\Error::thrown('PHP正则表达式匹配不到数据');
+                \system\Error::Thrown('PHP正则表达式匹配不到数据');
             }
             if(isset($regexp[2])){
                 $datas=$datas[$regexp[1]][$regexp[2]];

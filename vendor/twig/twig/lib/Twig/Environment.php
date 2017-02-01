@@ -49,6 +49,7 @@ class Twig_Environment
     private $bcWriteCacheFile = false;
     private $bcGetCacheFilename = false;
     private $lastModifiedExtension = 0;
+    private $tag=[];
     public $cache_dir=null;
 
     /**
@@ -89,14 +90,13 @@ class Twig_Environment
      * @param Twig_LoaderInterface $loader  A Twig_LoaderInterface instance
      * @param array                $options An array of options
      */
-    public function __construct(Twig_LoaderInterface $loader = null, $options = array())
+    public function __construct(Twig_LoaderInterface $loader = null, $options = array(),$tagop=[])
     {
         if (null !== $loader) {
             $this->setLoader($loader);
         } else {
             @trigger_error('Not passing a Twig_LoaderInterface as the first constructor argument of Twig_Environment is deprecated since version 1.21.', E_USER_DEPRECATED);
         }
-
         $options = array_merge(array(
             'debug' => false,
             'charset' => 'UTF-8',
@@ -108,6 +108,7 @@ class Twig_Environment
             'optimizations' => -1,
             'cache_dir'=>null,
         ), $options);
+        $this->tag=$tagop;
         $this->cache_dir=$options['cache_dir'];
         $this->debug = (bool) $options['debug'];
         $this->charset = strtoupper($options['charset']);
@@ -552,7 +553,7 @@ class Twig_Environment
     public function getLexer()
     {
         if (null === $this->lexer) {
-            $this->lexer = new Twig_Lexer($this);
+            $this->lexer = new Twig_Lexer($this,$this->tag);
         }
 
         return $this->lexer;

@@ -1,31 +1,21 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Controller{
-
-    //http库
-    protected $http=null;
-
-    //Model库
-    protected $model=null;
-
-    /**
-     * 控制器初始化
-     */
-    public function __construct(){
-        $this->http===null && $this->http=new \system\Http();
-        if(file_exists(APP_PATH.'Database'.EXT)){
-            $this->model===null && $this->model=new \system\Model();
-        }
-    }
 
     /**
      * 获取配置文件配置
      * @param $name 配置名称
      * @param string $file 配置文件
+     * @param string $return 获取为空时设置的返回值
      * @return bool|string
      */
-    protected function getconfig($name,$file=''){
-        return \system\Conf::get($name,$file);
+    protected function GetConfig($name,$return='',$file=''){
+        return \system\Conf::Get($name,$return,$file);
     }
 
     /**
@@ -35,8 +25,8 @@ class Controller{
      * @param string $file 配置文件
      * @return bool|string
      */
-    protected function setconfig($name,$value,$file=''){
-        return \system\Conf::set($name,$value,$file);
+    protected function SetConfig($name,$value,$file=''){
+        return \system\Conf::Set($name,$value,$file);
     }
 
     /**
@@ -53,7 +43,7 @@ class Controller{
      * @param string $msg 重定向前输出的信息
      * @param int $time 跳转时间
      */
-    protected function redirect($url='',$msg='',$time=0){
+    protected function Redirect($url='',$msg='',$time=0){
         if(!pregURL($url)){
             $url=url($url);
         }
@@ -68,8 +58,8 @@ class Controller{
      * @param $var 模板变量名 支持数组
      * @param string $value 模板变量值
      */
-    protected function assign($var,$value=''){
-        \system\View::assign($var,$value);
+    protected function Assign($var,$value=''){
+        \system\View::Assign($var,$value);
     }
 
     /**
@@ -77,8 +67,8 @@ class Controller{
      * @param string $file 模板文件
      * @param string $path 模板路径
      */
-    protected function display($file='',$path=''){
-        \system\View::display($file,$path);
+    protected function Display($file='',$path=''){
+        \system\View::Display($file,$path);
     }
 
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Log{
 
@@ -23,7 +28,7 @@ class Log{
             }
         }
         else{
-            \system\Error::thrown($driver.'日志驱动不存在');
+            \system\Error::Thrown($driver.'日志驱动不存在');
         }
     }
 
@@ -32,8 +37,8 @@ class Log{
      * @param $mssage 写入日志信息
      * @param string $path 写入路径
      */
-    public function write($mssage,$path=''){
-        return self::$log->write($mssage,$path);
+    public function Write($mssage,$path=''){
+        return self::$log->Write($mssage,$path);
     }
 
     /**
@@ -42,8 +47,8 @@ class Log{
      * @param string $path 日志路径
      * @return array|bools
      */
-    public function read($filename='',$path=''){
-        return self::$log->read($filename,$path);
+    public function Read($filename='',$path=''){
+        return self::$log->Read($filename,$path);
     }
 
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Framework:Z-PHP
+ * license:MIT
+ * Author:Albert Zhan(http://www.5lazy.cn)
+ */
 namespace system;
 class Session{
 
@@ -18,7 +23,7 @@ class Session{
     public static function init($config=[]){
         $is_start=false;
         if(empty($config)){
-            $config=\system\Conf::get('SESSION');
+            $config=\system\Conf::Get('SESSION');
         }
         $path=empty($config['PATH'])?ini_get('session.save_path'):$config['PATH'];
         ini_set('session.save_path',$path);
@@ -57,7 +62,7 @@ class Session{
      * 友好的开启SESSION
      * @param bool $reset 是否强制开启SESSION
      */
-    public static function start($reset=false){
+    public static function Start($reset=false){
        $reset===true?session_start():!isset($_SESSION) && session_start();
     }
 
@@ -69,10 +74,10 @@ class Session{
      * @param string $expire 过期时间
      * @return bool
      */
-    public static function set($name,$value,$prefix='',$expire=''){
-        empty(self::$is_start) && self::boot();
+    public static function Set($name,$value,$prefix='',$expire=''){
+        empty(self::$is_start) && self::Boot();
         $prefix=$prefix==''?self::$prefix:$prefix;
-        $expire===''? \system\Conf::set('SESSION',['EXPIRE'=>self::$time]): \system\Conf::set('SESSION',['EXPIRE'=>$expire]);
+        $expire===''? \system\Conf::Set('SESSION',['EXPIRE'=>self::$time]): \system\Conf::Set('SESSION',['EXPIRE'=>$expire]);
         if(ini_get('session.save_handler')=='files'){
             $expire=$expire===''?self::$time:$expire;
             $expire=$expire=='0'?99999999:$expire;
@@ -91,10 +96,10 @@ class Session{
      * @param string $prefix SESSION作用域
      * @return bool
      */
-    public static function has($name,$prefix=''){
-        empty(self::$is_start) && self::boot();
+    public static function Has($name,$prefix=''){
+        empty(self::$is_start) && self::Boot();
         $prefix=$prefix===''?self::$prefix:$prefix;
-        if(self::get($name,$prefix)){
+        if(self::Get($name,$prefix)){
                 return true;
         }
         else{
@@ -108,20 +113,20 @@ class Session{
      * @param string $prefix SESSION作用域
      * @return bool
      */
-    public static function get($name,$prefix=''){
-        empty(self::$is_start) && self::boot();
+    public static function Get($name,$prefix=''){
+        empty(self::$is_start) && self::Boot();
         $prefix=$prefix===''?self::$prefix:$prefix;
         if(empty($_SESSION[$prefix])) return false;
         if (ini_get('session.save_handler') == 'files') {
             if($name=='*'){
                 foreach($_SESSION[$prefix] as $k=>$v){
-                        list($value,$timeout)=explode(md5(sha1('Z-PHP')),$v);
-                        if($timeout>time()){
-                            $data[$k]=!is_array(json_decode($value,true))?$value:json_decode($value,true);
-                        }
-                        else{
-                            unset($_SESSION[$prefix][$k]);
-                        }
+                    list($value,$timeout)=explode(md5(sha1('Z-PHP')),$v);
+                    if($timeout>time()){
+                        $data[$k]=!is_array(json_decode($value,true))?$value:json_decode($value,true);
+                    }
+                    else{
+                        unset($_SESSION[$prefix][$k]);
+                    }
                 }
             }
             else{
@@ -146,8 +151,8 @@ class Session{
      * @param string $prefix SESSION作用域
      * @return bool
      */
-    public static function del($name,$prefix=''){
-        empty(self::$is_start) && self::boot();
+    public static function Del($name,$prefix=''){
+        empty(self::$is_start) && self::Boot();
         $prefix=$prefix===''?self::$prefix:$prefix;
         if(!empty($_SESSION[$prefix][$name])) {
             unset($_SESSION[$prefix][$name]);
@@ -163,7 +168,7 @@ class Session{
      * @param string $prefix SESSION作用域
      * @return bool
      */
-    public static function clean($prefix=''){
+    public static function Clean($prefix=''){
         $prefix=$prefix===''?self::$prefix:$prefix;
           if(isset($_SESSION[$prefix])){
               unset($_SESSION[$prefix]);
@@ -176,7 +181,7 @@ class Session{
      * 重启SESSION会话
      * @return void
      */
-    public static function boot()
+    public static function Boot()
     {
         if (is_null(self::$is_start)) {
             self::init();
@@ -190,7 +195,7 @@ class Session{
      * 销毁session
      * @return void
      */
-    public static function destroy()
+    public static function Destroy()
     {
         if (!empty($_SESSION)) {
             $_SESSION = [];
