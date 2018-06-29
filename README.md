@@ -10,5 +10,3 @@ Z-PHP是一款专注于爬虫和权限管理的开源PHP框架，继承着大多
 * 方便的自动生成定义
 * 引入PHPcomposer包管理
 * 多套模板引擎支持<br>
-#Z-PHP官网：[Z-PHP](http://zphp.5lazy.cn "Z-PHP")
-#<br>详细开发文档参考：[Z-PHP1.0完全开发手册](http://doc.5lazy.cn "Z-PHP1.0")
